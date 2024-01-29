@@ -15,18 +15,23 @@ ASFLAGS = -g
 SUM_ASSEMBLY_O_FILES = sum_clang6_O.o
 
 DIST_FILES =  \
-    add_benchmarks.c add.h add_main.c \
-    sum_clang6_O.s \
+    add_benchmarks.c add_benchmark.h add_main.c \
     Makefile
 
-default: add \
+default: add_benchmark \
      add_benchmarks.s 
 
-add: timing.o add_main.o add_benchmarks.o 
+add_benchmark: timing.o add_main.o add_benchmarks.o 
 	$(CC) $(CFLAGS) -o $@ $^
 
 add_benchmarks.s: add_benchmarks.c
 	$(CC) $(CFLAGS) -g0 -S -o $@ $^
 
+regular: regular_add.c
+	$(CC) $(CFLAGS) -g0 -o regular_add $^
+
+sse: sse_add.c 
+	$(CC) $(CFLAGS) -g0 -o sse_add $^
+
 clean:
-	rm -f *.o
+	rm -f *.o sse_add regular_add add_benchmark
