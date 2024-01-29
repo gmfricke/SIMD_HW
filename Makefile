@@ -12,28 +12,17 @@ CC = gcc
 CFLAGS = -g -O1 -std=c99 -mavx2 -mtune=skylake -Wall -fwrapv -fno-strict-aliasing
 ASFLAGS = -g
 
-SUM_ASSEMBLY_O_FILES = sum_clang6_O.o
-
 DIST_FILES =  \
     add_benchmarks.c add_benchmark.h add_main.c \
     Makefile
 
-default: add_benchmark \
+all: add_benchmark regular sse \
      add_benchmarks.s 
-
-wheeler: add_wheeler \
-	add_wheeler.s
-
-add_wheeler: timing.o add_main.o add_wheeler.o 
-	$(CC) $(CFLAGS) -o $@ $^
 
 add_benchmark: timing.o add_main.o add_benchmarks.o 
 	$(CC) $(CFLAGS) -o $@ $^
 
 add_benchmarks.s: add_benchmarks.c
-	$(CC) $(CFLAGS) -g0 -S -o $@ $^
-
-add_wheeler.s: add_wheeler.c
 	$(CC) $(CFLAGS) -g0 -S -o $@ $^
 
 regular: regular_add.c
@@ -43,4 +32,4 @@ sse: sse_add.c
 	$(CC) $(CFLAGS) -g0 -o sse_add $^
 
 clean:
-	rm -f *.o sse_add regular_add add_benchmark add_wheeler
+	rm -f *.o sse_add regular_add add_benchmark
