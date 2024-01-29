@@ -21,10 +21,19 @@ DIST_FILES =  \
 default: add_benchmark \
      add_benchmarks.s 
 
+wheeler: add_wheeler \
+	add_wheeler.s
+
+add_wheeler: timing.o add_main.o add_wheeler.o 
+	$(CC) $(CFLAGS) -o $@ $^
+
 add_benchmark: timing.o add_main.o add_benchmarks.o 
 	$(CC) $(CFLAGS) -o $@ $^
 
 add_benchmarks.s: add_benchmarks.c
+	$(CC) $(CFLAGS) -g0 -S -o $@ $^
+
+add_wheeler.s: add_wheeler.c
 	$(CC) $(CFLAGS) -g0 -S -o $@ $^
 
 regular: regular_add.c
@@ -34,4 +43,4 @@ sse: sse_add.c
 	$(CC) $(CFLAGS) -g0 -o sse_add $^
 
 clean:
-	rm -f *.o sse_add regular_add add_benchmark
+	rm -f *.o sse_add regular_add add_benchmark add_wheeler
